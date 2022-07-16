@@ -1,4 +1,4 @@
-# tic-tac-toe non graphical
+# tic-tac-toe Non graphical
 python tic tac toe not use any library except random
 
 here you can see the game , copy the code and enjoy playing
