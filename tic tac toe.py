@@ -1,4 +1,4 @@
-from random import *
+from random import choice, randint
 
 welcome = '''
 
@@ -60,7 +60,7 @@ def apoint(point, badpoint):
         return '7'
     elif (point == '1' and badpoint == '4') or (point == '9' and badpoint == '8'):
         return '3'
-    elif (point == '3' and badpoint == '2') and (point == '7' and badpoint == '4'):
+    elif (point == '3' and badpoint == '2') or (point == '7' and badpoint == '4'):
         return '9'
     elif (point == '3' and badpoint == '6') or (point == '7' and badpoint == '8'):
         return '1'
@@ -134,10 +134,11 @@ def emptyhome(b, thelist):
     return 0
 
 
-def easy():
-    n = randint(1, 9)
-    n = str(n)
-    return n
+def easy(b):
+    available = [k for k in b if b[k] == ' ']
+    if available:
+        return choice(available)
+    return None
 
 
 def medium(b, c):
@@ -151,7 +152,7 @@ def medium(b, c):
             return step1
         elif step == 2:
             if b[cpoint(step1)] == 'O' or oin(b, sides):
-                step2 = easy()
+                step2 = easy(b)
             else:
                 step2 = cpoint(step1)
             return step2
@@ -162,22 +163,22 @@ def medium(b, c):
                 step3 = odanger(b)
                 return step3
             else:
-                return easy()
+                return easy(b)
         elif step == 4:
             if xdanger(b):
                 return xdanger(b)
             elif odanger(b):
                 return odanger(b)
             else:
-                return easy()
+                return easy(b)
         elif step == 5:
             if xdanger(b):
                 return xdanger(b)
             else:
-                return easy()
+                return easy(b)
     elif c == 'O':
         if step == 1:
-            step1 = easy()
+            step1 = easy(b)
             return step1
         elif b['5'] == ' ':
             step1 = '5'
@@ -193,7 +194,7 @@ def medium(b, c):
                 step2 = choice(corners)
                 return step2
             else:
-                step2 = easy()
+                step2 = easy(b)
                 return step2
         elif step == 3:
             if odanger(b):
@@ -210,7 +211,7 @@ def medium(b, c):
             elif xdanger(b):
                 return xdanger(b)
             else:
-                return easy()
+                return easy(b)
 
 
 def hard(b, c):
@@ -248,7 +249,7 @@ def hard(b, c):
             if xdanger(b):
                 return xdanger(b)
             else:
-                return easy()
+                return easy(b)
     elif c == 'O':
         if b['1'] == b['3'] == b['7'] == b['9'] == ' ':
             step1 = choice(corners)
@@ -284,11 +285,12 @@ def hard(b, c):
             elif xdanger(b):
                 return xdanger(b)
             else:
-                return easy()
+                return easy(b)
 
 
 def game():
-    global computer
+    global computer, step1
+    step1 = None
     turn = 'X'
     count = 0
     flag = 0
@@ -351,43 +353,25 @@ def game():
 
         elif mood == '2' and turn != player:
             if c_mood == '1':
-                move = easy()
-
-                if theBoard[move] == ' ':
-
-                    theBoard[move] = turn
-                    printboard(theBoard)
-                    count += 1
-                else:
-                    continue
-            elif c_mood == '2' and turn != player:
+                move = easy(theBoard)
+            elif c_mood == '2':
                 move = medium(theBoard, computer)
-
-                if theBoard[move] == ' ':
-
-                    theBoard[move] = turn
-                    printboard(theBoard)
-                    count += 1
-                else:
-                    continue
-            elif c_mood == '3' and turn != player:
+            elif c_mood == '3':
                 move = hard(theBoard, computer)
 
-                if theBoard[move] == ' ':
-
-                    theBoard[move] = turn
-                    printboard(theBoard)
-                    count += 1
-                else:
-                    continue
+            if move and theBoard[move] == ' ':
+                theBoard[move] = turn
+                printboard(theBoard)
+                count += 1
+            else:
+                continue
         else:
 
             print("It's your turn," + turn + ".Move to which place?")
 
             move = input()
 
-            if theBoard[move] == ' ':
-
+            if move in theBoard and theBoard[move] == ' ':
                 theBoard[move] = turn
                 printboard(theBoard)
                 count += 1
@@ -424,7 +408,6 @@ def game():
     if restart == "y" or restart == "Y":
         for key in board_keys:
             theBoard[key] = " "
-            mood = ""
 
         game()
 
