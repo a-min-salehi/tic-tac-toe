@@ -325,7 +325,7 @@ def game():
                 else:
                     c_mood = input("\n\tEnter 1 , 2  or 3  the value that entered is invalid !!\n")
                     continue
-            player = input("enter X or O to choose your role : ")
+            player = input("enter X or O to choose your role : ").upper()
             while True:
                 if player == 'X' or player == 'x':
                     computer = 'O'
@@ -334,7 +334,7 @@ def game():
                     computer = 'X'
                     break
                 else:
-                    player = input("\n\tEnter X  or  O  the value that entered is invalid !!\n")
+                    player = input("\n\tEnter X  or  O  the value that entered is invalid !!\n").upper()
                     continue
             break
         else:
